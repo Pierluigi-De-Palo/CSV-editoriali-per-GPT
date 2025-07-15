@@ -44,8 +44,10 @@ def fetch_openlib_subject(subject):
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    niches = pd.read_csv("niches.csv")
-    keywords = niches["keyword"].dropna().tolist()
+        # dopo – usiamo la colonna "Keyword principali"
+    niches   = pd.read_csv("niches.csv")
+    keywords = niches["Keyword principali"].dropna().astype(str).tolist()
+
 
     trends_df = fetch_trends(keywords)
     trends_df.to_csv(f"{OUTPUT_DIR}/trends_selfpub.csv", index=False)
