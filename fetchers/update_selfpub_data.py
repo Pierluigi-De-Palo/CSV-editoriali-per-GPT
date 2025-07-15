@@ -10,11 +10,11 @@ OUTPUT_DIR = "output"
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-    # 1) Leggi le tue keyword dalla colonna "Keyword principali"
+    # 1) Leggi le keyword dalla colonna "Keyword principali"
     niches   = pd.read_csv("niches.csv")
     keywords = niches["Keyword principali"].dropna().astype(str).tolist()
 
-    # 2) Google Trends
+    # 2) Google Trends (chunking automatico a 5 keyword per batch)
     trends_df = fetch_trends(keywords)
     trends_df.to_csv(f"{OUTPUT_DIR}/trends_selfpub.csv", index=False)
 
