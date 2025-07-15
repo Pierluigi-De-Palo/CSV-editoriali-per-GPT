@@ -30,7 +30,10 @@ jobs:
           git config --global user.email "actions@github.com"
 
       - name: Commit e push dei dati aggiornati
-        run: |
-          git add niches.csv
-          git commit -m "Aggiorna trend settimanali da Google Trends" || echo "Nessuna modifica da commitare"
-          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/Pierluigi-De-Palo/CSV-editoriali-per-GPT.git HEAD:main
+  env:
+    GH_TOKEN: ${{ secrets.GH_TOKEN }}
+  run: |
+    git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/Pierluigi-De-Palo/CSV-editoriali-per-GPT.git
+    git add niches.csv
+    git commit -m "Aggiorna trend settimanali da Google Trends" || echo "Nessuna modifica da commitare"
+    git push origin HEAD:main
