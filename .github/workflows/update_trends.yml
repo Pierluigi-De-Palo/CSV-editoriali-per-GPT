@@ -17,10 +17,10 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Installa librerie
+    - name: Installa librerie Python
       run: pip install pytrends pandas
 
-    - name: Esegui lo script
+    - name: Esegui lo script Python
       run: python update_trends.py
 
     - name: Commit e push dei dati aggiornati
@@ -28,5 +28,5 @@ jobs:
         git config --global user.name 'github-actions'
         git config --global user.email 'actions@github.com'
         git add niches.csv
-        git commit -m "Aggiorna trend settimanali da Google Trends"
-        git push
+        git commit -m "Aggiorna trend settimanali da Google Trends" || echo "Nessuna modifica da committare"
+        git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main
