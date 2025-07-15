@@ -1,0 +1,38 @@
+name: Aggiorna trends settimanali
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'  # Ogni lunedì alle 08:00 UTC
+  workflow_dispatch:
+
+jobs:
+  update-trends:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout del repository
+        uses: actions/checkout@v4
+
+      - name: Imposta Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Installa dipendenze
+        run: pip install pytrends pandas
+
+      - name: Esegui script Python
+        run: python update_trends.py
+
+      - name: Configura Git per il commit
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+
+      - name: Commit e push dei dati aggiornati
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git add niches.csv
+          git commit -m "🔄 Aggiorna trend settimanali da Google Trends" || echo "Nessuna modifica da committare"
+          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git HEAD:main
