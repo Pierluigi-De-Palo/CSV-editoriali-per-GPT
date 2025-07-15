@@ -3,10 +3,10 @@ name: Aggiorna dati Self-Publishing
 on:
   schedule:
     - cron: '0 8 * * 1'    # ogni lunedì alle 08:00 UTC
-  workflow_dispatch:      # permette l’esecuzione manuale
+  workflow_dispatch:      # eseguibile anche manualmente
 
 permissions:
-  contents: write         # necessario per commit & push
+  contents: write         # serve per il push automatico
 
 jobs:
   update-selfpub:
@@ -26,11 +26,10 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-            - name: Run data update
+      - name: Run data update
         run: |
           python -m fetchers.update_selfpub_data
           python -m fetchers.update_niches_enriched
-
 
       - name: Commit & Push
         run: |
