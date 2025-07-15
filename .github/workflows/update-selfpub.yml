@@ -26,10 +26,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run data update
+            - name: Run data update
         run: |
-          python fetchers/update_selfpub_data.py
-          python fetchers/update_niches_enriched.py
+          python -m fetchers.update_selfpub_data
+          python -m fetchers.update_niches_enriched
+
 
       - name: Commit & Push
         run: |
