@@ -1,9 +1,15 @@
+# File: .github/workflows/update-trends.yml
 name: Aggiorna trends settimanali
 
+# trigger manuale e ogni lunedì alle 08:00 UTC
 on:
   schedule:
-    - cron: '0 8 * * 1'     # Ogni lunedì alle 08:00 UTC
-  workflow_dispatch:       # Ti permette di lanciare manualmente il workflow
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+# abilitiamo al token interno il permesso di scrittura sui contenuti
+permissions:
+  contents: write
 
 jobs:
   update-trends:
@@ -12,9 +18,6 @@ jobs:
     steps:
       - name: Checkout del repository
         uses: actions/checkout@v3
-        with:
-          persist-credentials: false   # Disabilita GITHUB_TOKEN
-          token: ${{ secrets.GH_TOKEN }}  # Usa il tuo Personal Access Token
 
       - name: Imposta Python
         uses: actions/setup-python@v4
@@ -33,4 +36,4 @@ jobs:
           git config --local user.email "actions@github.com"
           git add niches.csv
           git commit -m "Aggiorna trend settimanali da Google Trends" || echo "Nessuna modifica da committare"
-          git push origin HEAD:main
+          git push
