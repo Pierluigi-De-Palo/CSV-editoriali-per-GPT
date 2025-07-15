@@ -3,30 +3,38 @@ name: Aggiorna dati Self-Publishing
 on:
   schedule:
     - cron: '0 8 * * 1'    # ogni lunedì alle 08:00 UTC
-  workflow_dispatch:
+  workflow_dispatch:      # permette l’esecuzione manuale
 
 permissions:
-  contents: write
+  contents: write         # necessario per commit & push
 
 jobs:
   update-selfpub:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Setup Python
         uses: actions/setup-python@v4
-        with: { python-version: '3.11' }
-      - name: Install dependencies
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
         run: |
-          pip install pytrends pandas requests flake8
-      - name: Lint code
-        run: flake8 fetchers/*.py update_selfpub_data.py
-      - name: Run script
-        run: python update_selfpub_data.py
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run data update
+        run: |
+          python fetchers/update_selfpub_data.py
+          python fetchers/update_niches_enriched.py
+
       - name: Commit & Push
         run: |
           git config --local user.name "github-actions"
           git config --local user.email "actions@github.com"
-          git add ${OUTPUT_DIR:-output/selfpub}/*.csv
-          git commit -m "Aggiorna dati self-publishing" || echo "No changes"
-          git push
+          git add output/*.csv niches_enriched.csv
+          git commit -m "Aggiorna dati self-publishing e niches_enriched" || echo "No changes to commit"
+          git push origin HEAD:main
