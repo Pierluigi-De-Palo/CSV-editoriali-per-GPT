@@ -1,0 +1,33 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CSV Editoriali GPT",
+    "description": "Recupera un file CSV contenente dati editoriali dal repository GitHub di Pierluigi e lo analizza per generare nuove nicchie KDP",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://raw.githubusercontent.com/Pierluigi-De-Palo/CSV-editoriali-per-GPT/main"
+    }
+  ],
+  "paths": {
+    "/niches.csv": {
+      "get": {
+        "operationId": "getNichesCSV",
+        "summary": "Legge il file niches.csv con i dati editoriali",
+        "responses": {
+          "200": {
+            "description": "Contenuto CSV ricevuto",
+            "content": {
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
