@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout del repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Imposta Python
         uses: actions/setup-python@v4
@@ -30,9 +30,7 @@ jobs:
           git config --global user.email "actions@github.com"
 
       - name: Commit e push dei dati aggiornati
-        env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
           git add niches.csv
-          git commit -m "🔄 Aggiorna trend settimanali da Google Trends" || echo "Nessuna modifica da committare"
-          git push https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git HEAD:main
+          git commit -m "Aggiorna trend settimanali da Google Trends" || echo "Nessuna modifica da commitare"
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/Pierluigi-De-Palo/CSV-editoriali-per-GPT.git HEAD:main
