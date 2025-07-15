@@ -1,31 +1,30 @@
 import pandas as pd
 
 from fetchers.google_trends import fetch_trends
-from fetchers.google_books import fetch_books_metrics
+from fetchers.google_books import fetch_google_books
 from fetchers.open_library import fetch_openlib_subject
 
 OUTPUT_FILE = "niches_enriched.csv"
 
 def main():
-    # 1) Leggi il CSV di partenza, colonna "Keyword principali"
+    # 1) Leggi il CSV di partenza
     df = pd.read_csv("niches.csv")
     keywords = df["Keyword principali"].dropna().astype(str).tolist()
 
-    # 2) Calcola volume di ricerca medio settimanale
+    # 2) Volume di ricerca medio settimanale
     trends = fetch_trends(keywords)
-    # prendi la media per ciascuna keyword
     avg_vol = trends[keywords].mean().rename("avg_search_volume")
 
-    # 3) Recupera rating e recensioni da Google Books
-    books = fetch_books_metrics("self publishing", max_results=20)
+    # 3) Rating medio e totale recensioni (Books)
+    books = fetch_google_books("self publishing")
     avg_rating    = books["averageRating"].mean()
     total_reviews = books["ratingsCount"].sum()
 
-    # 4) Recupera work_count da Open Library
+    # 4) Numero di opere (Open Library)
     ol = fetch_openlib_subject("self publishing")
     work_count = ol["work_count"].iloc[0]
 
-    # 5) Unisci al DataFrame originale
+    # 5) Unisci i dati al DataFrame originale
     df["avg_search_volume"] = df["Keyword principali"].map(avg_vol.to_dict())
     df["avg_rating"]        = avg_rating
     df["total_reviews"]     = total_reviews
