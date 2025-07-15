@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0.0",
+  "name_for_human": "CSV Editoriali GPT",
+  "name_for_model": "csv_editoriali_gpt",
+  "description_for_human": "Legge il CSV ‘niches.csv’ dal repo GitHub e lo mette a disposizione per analisi",
+  "description_for_model": "Plugin per recuperare niches.csv e fornire i dati al modello",
+  "auth": {
+    "type": "none"
+  },
+  "api": {
+    "type": "openapi",
+    "url": "https://raw.githubusercontent.com/Pierluigi-De-Palo/CSV-editoriali-per-GPT/main/openapi.json",
+    "is_user_authenticated": false
+  },
+  "logo_url": "https://raw.githubusercontent.com/Pierluigi-De-Palo/CSV-editoriali-per-GPT/main/icon.png",
+  "contact_email": "tuo-email@example.com",
+  "legal_info_url": ""
+}
